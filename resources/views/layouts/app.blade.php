@@ -62,7 +62,7 @@
                     <i class="fa-solid fa-users w-4"></i> Users
                 </a>
                 @endif
-                <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">
+                <a href="{{ route('settings.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('settings.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
                     <i class="fa-solid fa-gear w-4"></i> Settings
                 </a>
             </nav>
