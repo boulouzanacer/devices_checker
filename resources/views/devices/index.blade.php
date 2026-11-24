@@ -119,13 +119,20 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4">
-                                <form method="POST" action="{{ route('devices.toggle-block', $device) }}" class="inline">
-                                    @csrf
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" {{ !$device->is_blocked ? 'checked' : '' }} onchange="this.form.submit()">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </form>
+                                @if($device->activation_code > 0)
+                                    <form method="POST" action="{{ route('devices.toggle-block', $device) }}" class="inline">
+                                        @csrf
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" {{ !$device->is_blocked ? 'checked' : '' }} onchange="this.form.submit()">
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </form>
+                                @else
+                                    {{-- Device non active : Enabled force a Disabled --}}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500" title="Device non activé">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Disabled
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-end gap-1">
