@@ -22,6 +22,9 @@ class DeviceCheckController extends Controller
             'app_version' => ['nullable', 'string', 'max:50'],
             'package_name' => ['nullable', 'string', 'max:100'],
             'app_name' => ['nullable', 'string', 'max:100'],
+            // Code d'activation envoye par l'application mobile (0 = non activee).
+            // Champ optionnel pour rester compatible avec les anciennes versions.
+            'activation_code' => ['nullable', 'integer', 'min:0'],
         ]);
 
         // Enregistre le revendeur recu depuis l'API dans la liste des revendeurs
@@ -38,6 +41,7 @@ class DeviceCheckController extends Controller
                 'app_version' => $data['app_version'] ?? null,
                 'package_name' => $data['package_name'] ?? null,
                 'app_name' => $data['app_name'] ?? null,
+                'activation_code' => $data['activation_code'] ?? 0,
                 'is_blocked' => false,
                 'first_seen' => $now,
                 'last_seen' => $now,
@@ -63,6 +67,7 @@ class DeviceCheckController extends Controller
             'app_version' => $data['app_version'] ?? $device->app_version,
             'package_name' => $data['package_name'] ?? $device->package_name,
             'app_name' => $data['app_name'] ?? $device->app_name,
+            'activation_code' => $data['activation_code'] ?? $device->activation_code,
         ]);
 
         DeviceHistory::record('connected', $device->device_id, $device->name,

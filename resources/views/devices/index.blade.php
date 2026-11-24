@@ -37,6 +37,7 @@
                         <th class="px-6 py-4 font-semibold">Device</th>
                         <th class="px-6 py-4 font-semibold">Application</th>
                         <th class="px-6 py-4 font-semibold">Version</th>
+                        <th class="px-6 py-4 font-semibold">Activation</th>
                         <th class="px-6 py-4 font-semibold">Reseller</th>
                         <th class="px-6 py-4 font-semibold">Status</th>
                         <th class="px-6 py-4 font-semibold">Last seen</th>
@@ -72,6 +73,17 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4">
+                                @if($device->activation_code > 0)
+                                    <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold font-mono bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                        {{ $device->activation_code }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Désactivé
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
                                 @if($device->revendeur)
                                     <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-600 border border-indigo-100">
                                         {{ $device->revendeur }}
@@ -81,13 +93,13 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4">
-                                @if($device->is_blocked)
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Disabled
+                                @if($device->is_online)
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-600">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-600">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Offline
                                     </span>
                                 @endif
                             </td>
@@ -131,7 +143,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-6 py-12 text-center text-gray-400">
+                            <td colspan="10" class="px-6 py-12 text-center text-gray-400">
                                 <i class="fa-solid fa-inbox text-3xl mb-2"></i>
                                 <p>Aucun device enregistré.</p>
                             </td>
@@ -226,6 +238,20 @@
                         <div>
                             <dt class="text-gray-400 uppercase text-xs tracking-wider mb-1">Package</dt>
                             <dd class="text-gray-900 font-mono text-xs break-all">{{ $device->package_name ?: '—' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-gray-400 uppercase text-xs tracking-wider mb-1">Code d'activation</dt>
+                            <dd>
+                                @if($device->activation_code > 0)
+                                    <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold font-mono bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                        {{ $device->activation_code }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Désactivé
+                                    </span>
+                                @endif
+                            </dd>
                         </div>
                         <div>
                             <dt class="text-gray-400 uppercase text-xs tracking-wider mb-1">Première connexion</dt>

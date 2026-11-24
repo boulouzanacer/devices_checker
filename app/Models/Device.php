@@ -21,6 +21,7 @@ class Device extends Model
         'app_version',
         'package_name',
         'app_name',
+        'activation_code',
     ];
 
     protected $casts = [
@@ -29,7 +30,23 @@ class Device extends Model
         'last_seen' => 'datetime',
         'last_disconnect' => 'datetime',
         'heartbeat_count' => 'integer',
+        'activation_code' => 'integer',
     ];
+
+    /**
+     * Delai (en minutes) au-dela duquel un device est considere hors ligne.
+     */
+    public const ONLINE_WINDOW_MINUTES = 1;
+
+    /**
+     * Device "en ligne" si son dernier contact (last_seen) date de moins de
+     * ONLINE_WINDOW_MINUTES. Au-dela, il est automatiquement hors ligne.
+     */
+    public function getIsOnlineAttribute(): bool
+    {
+        return $this->last_seen !== null
+            && $this->last_seen->greaterThan(now()->subMinutes(self::ONLINE_WINDOW_MINUTES));
+    }
 
     public function scopeBlocked($query)
     {
