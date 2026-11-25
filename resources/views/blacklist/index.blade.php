@@ -61,7 +61,7 @@
                                     </span>
                                 @else
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Désactivé
+                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Absent
                                     </span>
                                 @endif
                             </td>

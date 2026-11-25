@@ -79,7 +79,7 @@
                                     </span>
                                 @else
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Désactivé
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Absent
                                     </span>
                                 @endif
                             </td>
@@ -262,7 +262,7 @@
                                     </span>
                                 @else
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Désactivé
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Absent
                                     </span>
                                 @endif
                             </dd>
