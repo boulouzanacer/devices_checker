@@ -93,6 +93,15 @@ class DeviceController extends Controller
 
     public function destroy(Device $device)
     {
+        // Un device bloque est en liste noire : il est protege et ne peut pas
+        // etre supprime. Sinon, la suppression le re-enregistrerait
+        // automatiquement comme actif au prochain lancement de l'app mobile.
+        if ($device->is_blocked) {
+            return back()->withErrors([
+                'device' => 'Ce device est en liste noire (bloqué) : débloquez-le avant de le supprimer.',
+            ]);
+        }
+
         DeviceHistory::record('deleted', $device->device_id, $device->name,
             $device->revendeur, 'Device supprimé depuis l\'interface.');
 

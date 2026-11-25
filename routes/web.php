@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\RevendeurController;
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/revendeurs', [RevendeurController::class, 'index'])->name('revendeurs.index');
 
     Route::get('/historique', [HistoryController::class, 'index'])->name('history.index');
+
+    // Liste noire : devices bloques, proteges (non supprimables).
+    Route::get('/liste-noire', [BlacklistController::class, 'index'])->name('blacklist.index');
 
     Route::get('/parametres', [SettingsController::class, 'index'])->name('settings.index');
 

@@ -142,9 +142,16 @@
                                     <button type="button" onclick="openModal('modal-edit-{{ $device->id }}')" class="p-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition" title="Edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
-                                    <button type="button" onclick="openModal('modal-delete-{{ $device->id }}')" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition" title="Delete">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                    @if($device->is_blocked)
+                                        {{-- Device en liste noire : protege, non supprimable --}}
+                                        <span class="p-2 text-gray-300" title="Device en liste noire : non supprimable">
+                                            <i class="fa-solid fa-lock"></i>
+                                        </span>
+                                    @else
+                                        <button type="button" onclick="openModal('modal-delete-{{ $device->id }}')" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition" title="Delete">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

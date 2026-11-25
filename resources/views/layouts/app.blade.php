@@ -57,6 +57,9 @@
                 <a href="{{ route('history.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('history.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
                     <i class="fa-solid fa-clock-rotate-left w-4"></i> Historique
                 </a>
+                <a href="{{ route('blacklist.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('blacklist.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
+                    <i class="fa-solid fa-ban w-4"></i> Liste noire
+                </a>
                 @if(auth()->user()->isAdmin())
                 <a href="{{ route('users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ request()->routeIs('users.*') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
                     <i class="fa-solid fa-users w-4"></i> Users
