@@ -87,6 +87,34 @@ class DeviceCheckController extends Controller
     }
 
     /**
+     * Signale que l'application n'est plus au premier plan (arriere-plan /
+     * fermeture). Met a jour last_disconnect afin que l'interface web bascule
+     * le device hors ligne immediatement.
+     */
+    public function disconnect(Request $request)
+    {
+        $data = $request->validate([
+            'device_id' => ['required', 'string', 'max:100'],
+        ]);
+
+        $device = Device::where('device_id', $data['device_id'])->first();
+
+        if ($device) {
+            $device->update(['last_disconnect' => now()]);
+
+            DeviceHistory::record('disconnected', $device->device_id, $device->name,
+                $device->revendeur,
+                'L\'application a signalé son passage en arrière-plan.',
+                $request->ip());
+        }
+
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'Déconnexion signalée.',
+        ]);
+    }
+
+    /**
      * Ajoute le revendeur a la liste s'il n'y existe pas encore.
      */
     private function registerRevendeur(?string $name): void

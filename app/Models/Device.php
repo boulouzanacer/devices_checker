@@ -35,17 +35,30 @@ class Device extends Model
 
     /**
      * Delai (en minutes) au-dela duquel un device est considere hors ligne.
+     * Aligne sur le heartbeat mobile (45 s) : la marge de 1 min evite tout
+     * clignotement entre deux heartbeats.
      */
     public const ONLINE_WINDOW_MINUTES = 1;
 
     /**
-     * Device "en ligne" si son dernier contact (last_seen) date de moins de
-     * ONLINE_WINDOW_MINUTES. Au-dela, il est automatiquement hors ligne.
+     * Device "en ligne" si :
+     *  - son dernier contact (last_seen) date de moins de ONLINE_WINDOW_MINUTES, ET
+     *  - aucun signal de sortie (last_disconnect) n'est posterieur a ce dernier
+     *    contact : dans ce cas l'application a signale son arret et le device est
+     *    bascule hors ligne immediatement.
      */
     public function getIsOnlineAttribute(): bool
     {
-        return $this->last_seen !== null
-            && $this->last_seen->greaterThan(now()->subMinutes(self::ONLINE_WINDOW_MINUTES));
+        if ($this->last_seen === null) {
+            return false;
+        }
+
+        if ($this->last_disconnect !== null
+            && $this->last_disconnect->greaterThanOrEqualTo($this->last_seen)) {
+            return false;
+        }
+
+        return $this->last_seen->greaterThan(now()->subMinutes(self::ONLINE_WINDOW_MINUTES));
     }
 
     public function scopeBlocked($query)

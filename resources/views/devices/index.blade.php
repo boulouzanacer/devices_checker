@@ -393,5 +393,32 @@
                 document.body.classList.remove('overflow-hidden');
             }
         });
+
+        // Rafraichissement automatique du statut des devices.
+        // Aucune requete n'est envoyee lorsque l'onglet est en arriere-plan, qu'une
+        // fenetre modale est ouverte ou qu'un champ de saisie a le focus : cela
+        // evite toute "pollution" d'appels cote serveur.
+        (function () {
+            var REFRESH_MS = 30000;
+            var SCROLL_KEY = 'devices-scroll-y';
+
+            // Restaure la position de defilement apres un rechargement automatique.
+            try {
+                var y = sessionStorage.getItem(SCROLL_KEY);
+                if (y !== null) {
+                    window.scrollTo(0, parseInt(y, 10));
+                    sessionStorage.removeItem(SCROLL_KEY);
+                }
+            } catch (e) {}
+
+            setInterval(function () {
+                if (document.visibilityState !== 'visible') return;
+                if (document.querySelector('.modal:not(.hidden)')) return;
+                var active = document.activeElement;
+                if (active && ['INPUT', 'TEXTAREA', 'SELECT'].indexOf(active.tagName) !== -1) return;
+                try { sessionStorage.setItem(SCROLL_KEY, String(window.scrollY || 0)); } catch (e) {}
+                window.location.reload();
+            }, REFRESH_MS);
+        })();
     </script>
 @endsection
