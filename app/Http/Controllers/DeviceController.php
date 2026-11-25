@@ -102,9 +102,11 @@ class DeviceController extends Controller
 
     public function toggleBlock(Device $device)
     {
+        // Le blocage ne modifie pas la presence (last_seen / last_disconnect) :
+        // le statut Online/Offline doit refleter uniquement l'etat reel de
+        // l'application mobile, independamment du fait que le device soit bloque.
         $device->update([
             'is_blocked' => !$device->is_blocked,
-            'last_disconnect' => !$device->is_blocked ? now() : null,
         ]);
 
         if ($device->is_blocked) {
