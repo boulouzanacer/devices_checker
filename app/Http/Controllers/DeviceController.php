@@ -110,10 +110,10 @@ class DeviceController extends Controller
         ]);
 
         if ($device->is_blocked) {
-            DeviceHistory::record('disconnected', $device->device_id, $device->name,
+            DeviceHistory::record('blocked', $device->device_id, $device->name,
                 $device->revendeur, 'Device bloqué depuis l\'interface.');
         } else {
-            DeviceHistory::record('connected', $device->device_id, $device->name,
+            DeviceHistory::record('unblocked', $device->device_id, $device->name,
                 $device->revendeur, 'Device débloqué depuis l\'interface.');
         }
 

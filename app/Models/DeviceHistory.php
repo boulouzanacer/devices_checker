@@ -25,6 +25,8 @@ class DeviceHistory extends Model
         'registered' => 'Inscription',
         'connected' => 'Connexion',
         'disconnected' => 'Déconnexion',
+        'blocked' => 'Bloqué',
+        'unblocked' => 'Débloqué',
         'updated' => 'Modification',
         'deleted' => 'Suppression',
     ];

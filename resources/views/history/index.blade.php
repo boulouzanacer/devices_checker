@@ -62,6 +62,8 @@
                                         'registered' => 'bg-blue-50 text-blue-600',
                                         'connected' => 'bg-green-50 text-green-600',
                                         'disconnected' => 'bg-gray-100 text-gray-500',
+                                        'blocked' => 'bg-red-50 text-red-600',
+                                        'unblocked' => 'bg-emerald-50 text-emerald-600',
                                         'updated' => 'bg-amber-50 text-amber-600',
                                         'deleted' => 'bg-red-50 text-red-600',
                                     ][$history->event] ?? 'bg-gray-100 text-gray-500';
