@@ -112,7 +112,7 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-gray-600">
-                                @if($device->last_disconnect)
+                                @if(! $device->is_online && $device->last_disconnect)
                                     {{ $device->last_disconnect->diffForHumans() }}
                                 @else
                                     <span class="text-gray-300">—</span>
