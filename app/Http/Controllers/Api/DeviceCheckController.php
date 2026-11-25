@@ -60,6 +60,12 @@ class DeviceCheckController extends Controller
 
         $wasBlocked = $device->is_blocked;
 
+        // Etat de presence AVANT mise a jour. Il sert a ne journaliser
+        // l'evenement "Connexion" que lors d'une vraie transition
+        // hors ligne -> en ligne. Sans cela, chaque heartbeat (toutes les
+        // 45 s) creerait une ligne dans l'historique.
+        $wasOnline = $device->is_online;
+
         $device->update([
             'last_seen' => $now,
             'heartbeat_count' => $device->heartbeat_count + 1,
@@ -70,12 +76,16 @@ class DeviceCheckController extends Controller
             'activation_code' => $data['activation_code'] ?? $device->activation_code,
         ]);
 
-        DeviceHistory::record('connected', $device->device_id, $device->name,
-            $device->revendeur,
-            $wasBlocked
-                ? 'Connexion refusée : device bloqué (mode évaluation).'
-                : 'Connexion signalée par l\'application.',
-            $request->ip());
+        // Journalise uniquement a l'entree en ligne (transition), pas a
+        // chaque heartbeat.
+        if (!$wasOnline) {
+            DeviceHistory::record('connected', $device->device_id, $device->name,
+                $device->revendeur,
+                $wasBlocked
+                    ? 'Connexion refusée : device bloqué (mode évaluation).'
+                    : 'Connexion signalée par l\'application.',
+                $request->ip());
+        }
 
         return response()->json([
             'status' => $device->is_blocked ? 'blocked' : 'active',
@@ -100,12 +110,18 @@ class DeviceCheckController extends Controller
         $device = Device::where('device_id', $data['device_id'])->first();
 
         if ($device) {
+            // Journalise uniquement la transition en ligne -> hors ligne,
+            // afin d'eviter les doublons si le signal est recu plusieurs fois.
+            $wasOnline = $device->is_online;
+
             $device->update(['last_disconnect' => now()]);
 
-            DeviceHistory::record('disconnected', $device->device_id, $device->name,
-                $device->revendeur,
-                'L\'application a signalé son passage en arrière-plan.',
-                $request->ip());
+            if ($wasOnline) {
+                DeviceHistory::record('disconnected', $device->device_id, $device->name,
+                    $device->revendeur,
+                    'L\'application a signalé son passage en arrière-plan.',
+                    $request->ip());
+            }
         }
 
         return response()->json([
